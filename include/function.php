@@ -79,3 +79,22 @@ function fetch_ads() {
 
     return $ads;
 }
+
+function create_ad($title, $description, $user_id) {
+    global $pdo;
+
+    // Подготовить SQL для вставки данных объявления в базу данных
+    $stmt = $pdo->prepare("INSERT INTO ads (title, description, user_id) VALUES (:title, :description, :user_id)");
+
+    // Связать данные объявления с SQL
+    $stmt->bindParam(':title', $title);
+    $stmt->bindParam(':description', $description);
+    $stmt->bindParam(':user_id', $user_id);
+
+    // Возвращает id нового объявления
+    if ($stmt->execute()) {
+        return $pdo->lastInsertId();
+    } else {
+        return false;
+    }
+}
